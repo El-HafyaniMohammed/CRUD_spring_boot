@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Candidat {
 
-    private Long id;
+    private int id;
     private String cne;
     private String cin;
     private String nomCandidatAr;

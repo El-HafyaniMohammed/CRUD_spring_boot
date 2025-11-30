@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
-import com.example.demo.model.Candidat;
+import com.example.demo.Entity.CandidatEntity;
+import com.example.demo.Repository.CandidatRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,53 +12,31 @@ import java.util.List;
 @Service
 public class CandidatService {
 
-    private List<Candidat> candidats = new ArrayList<>();
+  @Autowired
+  CandidatRepository candidatRepository;
 
-    
-    public CandidatService() {
-        candidats.add(new Candidat(
-                1L, "CNE001", "AA123456",
-                "Elhafyani", "Mohammed",
-                "Rue Hassan II", "rachidia",
-                "Homme", "Fès", "rachidia", "Fès",
-                new Date(), "Aucun", "Académie Fès-Meknès",
-                "0612345678", "/cv/mohammed.pdf",
-                "/photo/mohammed.jpg", 1,
-                "Célibataire", 1L, 10, false
-        ));
-    }
+  // fonction return all candidats
+  public List<CandidatEntity> getAllCondidat() {
+    return candidatRepository.findAll();
+  }
 
-  
-    public List<Candidat> getTousLesCandidats() {
-        return candidats;
-    }
+  // fonction return candidat by id
+  public CandidatEntity getCandidatById(Long id) {
+    return candidatRepository.findById(id).orElse(null);
+  }
 
-    public Candidat getCandidatParId(Long id) {
-        return candidats.stream()
-                .filter(c -> c.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-    }
+  // fonction ajouter candidat
+  public CandidatEntity ajouterCandidat(CandidatEntity candidat) {
+    return candidatRepository.save(candidat);
+  }
 
-    public Candidat ajouterCandidat(Candidat candidat) {
-        candidat.setId((long) (candidats.size() + 1));
-        candidats.add(candidat);
-        return candidat;
-    }
+  // fonction modifier candidat
+  public CandidatEntity modifierCandidat(CandidatEntity candidat) {
+    return candidatRepository.save(candidat);
+  }
 
-    public Candidat modifierCandidat(Long id, Candidat nouveauCandidat) {
-        for (int i = 0; i < candidats.size(); i++) {
-            if (candidats.get(i).getId().equals(id)) {
-                nouveauCandidat.setId(id);
-                candidats.set(i, nouveauCandidat);
-                return nouveauCandidat;
-            }
-        }
-        return null;
-    }
-
-    // 🔹 Supprimer un candidat
-    public boolean supprimerCandidat(Long id) {
-        return candidats.removeIf(c -> c.getId().equals(id));
-    }
+  // fonction supprimer candidat
+  public void supprimerCandidat(Long id) {
+    candidatRepository.deleteById(id);
+  }
 }
